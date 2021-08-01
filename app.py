@@ -41,7 +41,7 @@ def index():
               user_status=db.child("Users").child(employee_id).child("profile/status").get().val()
               user_id=employee_id
         if (user_status=="admin"):
-            if db.child("Users").child(employee_id).child("messages").get().val() is not None:
+            if db.child("Users").child(user_id).child("messages").get().val() is not None:
               msgss=getmessages(user_id)
               return render_template("index.html", name = user_name,msgss=msgss,msg=True)
             else:

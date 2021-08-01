@@ -16,11 +16,10 @@ from Authorization.login import employee_login
 from Authorization.resetPassword import reset_password
 from FirebaseCredentials.Firebase import auth,db
 from projects.addProject import CreateProject
-import os
 
 app = Flask(__name__)
 
-app.secret_key=os.urandom(24)
+app.secret_key="thisisblinkathonhackathon"
 
 
 @app.route("/")

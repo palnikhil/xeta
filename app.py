@@ -1,3 +1,4 @@
+from message.getMessage import getmessages
 from BlinkskyAPI.sendReward import SendReward
 from users.Rewards import  GetRewardDetails
 from projects.rate_task import rateProject
@@ -38,15 +39,20 @@ def index():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_status=db.child("Users").child(employee_id).child("profile/status").get().val()
+              user_id=employee_id
         if (user_status=="admin"):
-         return render_template("index.html", name = user_name)
+            if db.child("Users").child(employee_id).child("messages").get().val() is not None:
+              msgss=getmessages(user_id)
+              return render_template("index.html", name = user_name,msgss=msgss,msg=True)
+            else:
+              return render_template("index.html", name = user_name)  
         else :
          return render_template("index_member.html", name=user_name)
     except KeyError:
         return redirect("/login")
 
-@app.route("/registration",methods=["GET","POST"])
-def registration():
+@app.route("/registeration",methods=["GET","POST"])
+def registeration():
     if request.method=="POST":
             email=request.form["email"]
             password=request.form["password"]
@@ -55,9 +61,10 @@ def registration():
             employee_company=request.form["employee_company"]
             employee_name=request.form["employee_name"]
             admin=request.form["admin"]
+            print(admin)
             register_user(email,password,employeeCode,mobile,employee_company,employee_name,admin)
             return redirect("/dashboard")
-    return render_template("Registration.html")
+    return render_template("Registeration.html")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
@@ -153,8 +160,11 @@ def projects():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id 
-        projects_info=project_details(user_id)
-        return render_template("projects.html",name=user_name,projects=projects_info)
+        if db.child("Users/"+user_id+"/Projects").get().val() is not None:
+         projects_info=project_details(user_id)
+         return render_template("projects.html",name=user_name,projects=projects_info)
+        else:
+         return render_template("projects.html",name=user_name,message="No Running Projects were found")
     except KeyError:
         return redirect("/login")
 
@@ -174,8 +184,11 @@ def idea_submissions():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id
-        idea_details=business_idea(user_id)
-        return render_template("idea_submissions.html",name=user_name,ideas=idea_details)
+        if db.child("Users/"+user_id+"/ideaSubmission").get().val() is not None:
+         idea_details=business_idea(user_id)
+         return render_template("idea_submissions.html",name=user_name,ideas=idea_details)
+        else:
+          return render_template("idea_submissions.html",name=user_name,message="No Business Ideas Found")
     except KeyError:
         return redirect("/login")
 
@@ -191,8 +204,11 @@ def submissions():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id
-        task_details=submission_details(user_id)
-        return render_template("submissions.html",name=user_name,tasks=task_details)
+        if db.child("Users/"+user_id+"/task_submissions").get().val() is not None:
+         task_details=submission_details(user_id)
+         return render_template("submissions.html",name=user_name,tasks=task_details)
+        else:
+         return render_template("submissions.html",message="No Submissions Found")
     except KeyError:
         return redirect("/login")
 
@@ -209,8 +225,11 @@ def reward_history():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id
-        reward=GetRewardDetails(user_id)
-        return render_template("history.html",name=user_name,rewards=reward)
+        if db.child("Users/"+user_id+"/rewards").get().val() is not None:
+         reward=GetRewardDetails(user_id)
+         return render_template("history.html",name=user_name,rewards=reward)
+        else:
+         return render_template("history.html",name=user_name,message="No Gift Cards has been issued")
     except KeyError:
         return redirect("/login")
 
@@ -285,8 +304,11 @@ def memberProjects():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id 
-        projects_info=project_details(user_id)
-        return render_template("member_projects.html",name=user_name,projects=projects_info)
+        if db.child("Users/"+user_id+"/Projects").get().val() is not None:
+         projects_info=project_details(user_id)
+         return render_template("member_projects.html",name=user_name,projects=projects_info)
+        else:
+          return render_template("member_projects.html",name=user_name,message="No Running Projects were found")
     except KeyError:
         return redirect("/login")
 
@@ -381,8 +403,11 @@ def member_reward_history():
             if (customer_session==session['usr']) :
               user_name=db.child("Users").child(employee_id).child("profile/name").get().val()
               user_id=employee_id
-        reward=GetRewardDetails(user_id)
-        return render_template("member_reward_history.html",name=user_name,rewards=reward)
+        if db.child("Users/"+user_id+"/Projects").get().val() is not None:
+         reward=GetRewardDetails(user_id)
+         return render_template("member_reward_history.html",name=user_name,rewards=reward)
+        else:
+         return render_template("member_reward_history.html",name=user_name,message="No Rewards Issued till Now")
     except KeyError:
         return redirect("/login")
 

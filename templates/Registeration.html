@@ -28,7 +28,7 @@
                 <p class="login-card-description" style="display:inline;font-weight:bold">Xeta</p>
               </div>
               <p class="login-card-description">Register your account</p>
-              <form action="/registration" method="POST">
+              <form action="/registeration" method="POST">
                 {% if sweetalert==True %}
                 <body onload="doMyAlerts('{{err_msg}}');"></body>
                {% endif %}
@@ -57,10 +57,11 @@
                     <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                   </div>
                   <div class="form-group mb-4">
-                    <input type="checkbox" id="checkbox" name="admincheck" value="True">
+                    <input type="checkbox" id="admincheck" name="" value="">
                     <label for="checkbox">Register as Team Lead</label><br>
-                    <input type="hidden" name="admin" id="admin">
                   </div>
+                  
+                  <input type="hidden" name="admin" id="admin">
                   <button class="btn btn-primary btn-block my-4" type="submit">Register</button>
                 </form>
 
@@ -113,14 +114,14 @@
         }
   </script>
   <script>
-    if($("#checkbox").is(':checked'))
-    {
-      $('#admin').val("True");
-    } 
-    else 
-    {
-      $('#admin').val("False");
-    }
-  </script>
+    $( "#admincheck" ).click(function() {
+        if(this.checked){
+            $('#admin').val('True');
+        }
+        else{
+            $('#admin').val('True');
+        }
+    });
+</script>
 </body>
 </html>

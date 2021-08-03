@@ -43,5 +43,5 @@ opencv
 python
 scss
 
-#Try it out
- xeta.herokuapp.com
+# Try it out
+ link - https://xeta.herokuapp.com
